@@ -1,13 +1,31 @@
 const movies = [
-{ name: "La lista de Schindler", wins: 0, comparisons: 0 },
-{ name: "El discurso del rey", wins: 0, comparisons: 0 },
-{ name: "Una mente brillante", wins: 0, comparisons: 0 },
-{ name: "12 años de esclavitud", wins: 0, comparisons: 0 },
-{ name: "Interestelar", wins: 0, comparisons: 0 },
-{ name: "El club de los poetas muertos", wins: 0, comparisons: 0 }
+{
+name: "La lista de Schindler",
+image: "https://m.media-amazon.com/images/I/51NiGlapXlL.*AC*.jpg",
+wins: 0,
+comparisons: 0
+},
+{
+name: "Una mente brillante",
+image: "https://m.media-amazon.com/images/I/41qS6e8F1BL.*AC*.jpg",
+wins: 0,
+comparisons: 0
+},
+{
+name: "El club de los poetas muertos",
+image: "https://m.media-amazon.com/images/I/51Qvs9i5a%2BL.*AC*.jpg",
+wins: 0,
+comparisons: 0
+},
+{
+name: "Interestelar",
+image: "https://m.media-amazon.com/images/I/71n58W0b7BL.*AC_SL1024*.jpg",
+wins: 0,
+comparisons: 0
+}
 ];
 
-let currentPair = [];
+let currentIndexes = [];
 
 function getRandomPair() {
 let indexA = Math.floor(Math.random() * movies.length);
@@ -18,23 +36,25 @@ do {
     indexB = Math.floor(Math.random() * movies.length);
 } while (indexA === indexB);
 
-currentPair = [indexA, indexB];
+currentIndexes = [indexA, indexB];
 
-document.getElementById("movieA").innerText = movies[indexA].name;
-document.getElementById("movieB").innerText = movies[indexB].name;
+document.getElementById("imgA").src = movies[indexA].image;
+document.getElementById("titleA").innerText = movies[indexA].name;
+
+document.getElementById("imgB").src = movies[indexB].image;
+document.getElementById("titleB").innerText = movies[indexB].name;
 ```
 
 }
 
-function vote(selectedIndex) {
-let winner = movies[selectedIndex];
-let loserIndex = currentPair[0] === selectedIndex ? currentPair[1] : currentPair[0];
-let loser = movies[loserIndex];
+function vote(choice) {
+let winnerIndex = currentIndexes[choice];
+let loserIndex = currentIndexes[choice === 0 ? 1 : 0];
 
 ```
-winner.wins++;
-winner.comparisons++;
-loser.comparisons++;
+movies[winnerIndex].wins++;
+movies[winnerIndex].comparisons++;
+movies[loserIndex].comparisons++;
 
 updateRanking();
 getRandomPair();
@@ -43,28 +63,25 @@ getRandomPair();
 }
 
 function updateRanking() {
-let sortedMovies = [...movies].sort((a, b) => {
+let sorted = [...movies].sort((a, b) => {
 let scoreA = a.comparisons === 0 ? 0 : a.wins / a.comparisons;
 let scoreB = b.comparisons === 0 ? 0 : b.wins / b.comparisons;
 return scoreB - scoreA;
 });
 
 ```
-let rankingList = document.getElementById("rankingList");
-rankingList.innerHTML = "";
+const list = document.getElementById("rankingList");
+list.innerHTML = "";
 
-sortedMovies.forEach(movie => {
+sorted.forEach(movie => {
     let score = movie.comparisons === 0 ? 0 : (movie.wins / movie.comparisons).toFixed(2);
     let li = document.createElement("li");
-    li.textContent = `${movie.name} - Score: ${score}`;
-    rankingList.appendChild(li);
+    li.textContent = `${movie.name} — Score de Aprendizaje: ${score}`;
+    list.appendChild(li);
 });
 ```
 
 }
 
-document.getElementById("movieA").addEventListener("click", () => vote(currentPair[0]));
-document.getElementById("movieB").addEventListener("click", () => vote(currentPair[1]));
-
 getRandomPair();
-
+updateRanking();
