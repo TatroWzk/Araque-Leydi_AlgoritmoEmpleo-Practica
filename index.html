@@ -1,29 +1,27 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Interview Simulation Recommender</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <title>MovieMash - Películas para Aprender</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<h1>Interview Simulation Recommender</h1>
-<p>Choose the mock interview service that would most improve your employability.</p>
+```
+<h1>🎬 MovieMash</h1>
+<h2>¿Qué película te enseña más?</h2>
 
-<div id="comparison">
-    <button id="optionA"></button>
-    <span>VS</span>
-    <button id="optionB"></button>
+<div class="comparison-container">
+    <button id="movieA" class="movie-button"></button>
+    <button id="movieB" class="movie-button"></button>
 </div>
 
-<div id="result" class="hidden">
-    <h2>Final Ranking</h2>
-    <ol id="rankingList"></ol>
-    <button onclick="restart()">Restart</button>
-</div>
+<h3>Ranking de Aprendizaje</h3>
+<ul id="rankingList"></ul>
 
 <script src="script.js"></script>
+```
 
 </body>
 </html>
