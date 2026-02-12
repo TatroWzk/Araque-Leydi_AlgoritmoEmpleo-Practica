@@ -1,91 +1,70 @@
-const services = [
-{ name: "Technical Interview Mock (IT & Engineering)", score: 0 },
-{ name: "Behavioral Interview Coaching", score: 0 },
-{ name: "HR Interview Simulation", score: 0 },
-{ name: "Case Study Interview Practice", score: 0 },
-{ name: "English Fluency Interview Training", score: 0 },
-{ name: "Leadership Interview Coaching", score: 0 },
-{ name: "STAR Method Training", score: 0 },
-{ name: "Executive Level Interview Prep", score: 0 }
+const movies = [
+{ name: "La lista de Schindler", wins: 0, comparisons: 0 },
+{ name: "El discurso del rey", wins: 0, comparisons: 0 },
+{ name: "Una mente brillante", wins: 0, comparisons: 0 },
+{ name: "12 años de esclavitud", wins: 0, comparisons: 0 },
+{ name: "Interestelar", wins: 0, comparisons: 0 },
+{ name: "El club de los poetas muertos", wins: 0, comparisons: 0 }
 ];
 
-let comparisons = 0;
-const maxComparisons = 15;
+let currentPair = [];
 
-function getTwoRandomServices() {
-let indexA = Math.floor(Math.random() * services.length);
+function getRandomPair() {
+let indexA = Math.floor(Math.random() * movies.length);
 let indexB;
 
 ```
 do {
-    indexB = Math.floor(Math.random() * services.length);
+    indexB = Math.floor(Math.random() * movies.length);
 } while (indexA === indexB);
 
-return [services[indexA], services[indexB]];
+currentPair = [indexA, indexB];
+
+document.getElementById("movieA").innerText = movies[indexA].name;
+document.getElementById("movieB").innerText = movies[indexB].name;
 ```
 
 }
 
-function showComparison() {
-if (comparisons >= maxComparisons) {
-showResults();
-return;
-}
+function vote(selectedIndex) {
+let winner = movies[selectedIndex];
+let loserIndex = currentPair[0] === selectedIndex ? currentPair[1] : currentPair[0];
+let loser = movies[loserIndex];
 
 ```
-const [serviceA, serviceB] = getTwoRandomServices();
+winner.wins++;
+winner.comparisons++;
+loser.comparisons++;
 
-const buttonA = document.getElementById("optionA");
-const buttonB = document.getElementById("optionB");
-
-buttonA.textContent = serviceA.name;
-buttonB.textContent = serviceB.name;
-
-buttonA.onclick = () => {
-    serviceA.score++;
-    comparisons++;
-    showComparison();
-};
-
-buttonB.onclick = () => {
-    serviceB.score++;
-    comparisons++;
-    showComparison();
-};
+updateRanking();
+getRandomPair();
 ```
 
 }
 
-function showResults() {
-document.getElementById("comparison").classList.add("hidden");
-document.getElementById("result").classList.remove("hidden");
+function updateRanking() {
+let sortedMovies = [...movies].sort((a, b) => {
+let scoreA = a.comparisons === 0 ? 0 : a.wins / a.comparisons;
+let scoreB = b.comparisons === 0 ? 0 : b.wins / b.comparisons;
+return scoreB - scoreA;
+});
 
 ```
-services.sort((a, b) => b.score - a.score);
-
-const rankingList = document.getElementById("rankingList");
+let rankingList = document.getElementById("rankingList");
 rankingList.innerHTML = "";
 
-services.forEach(service => {
-    const li = document.createElement("li");
-    li.textContent = service.name + " - Score: " + service.score;
+sortedMovies.forEach(movie => {
+    let score = movie.comparisons === 0 ? 0 : (movie.wins / movie.comparisons).toFixed(2);
+    let li = document.createElement("li");
+    li.textContent = `${movie.name} - Score: ${score}`;
     rankingList.appendChild(li);
 });
 ```
 
 }
 
-function restart() {
-services.forEach(service => service.score = 0);
-comparisons = 0;
+document.getElementById("movieA").addEventListener("click", () => vote(currentPair[0]));
+document.getElementById("movieB").addEventListener("click", () => vote(currentPair[1]));
 
-```
-document.getElementById("comparison").classList.remove("hidden");
-document.getElementById("result").classList.add("hidden");
+getRandomPair();
 
-showComparison();
-```
-
-}
-
-showComparison();
